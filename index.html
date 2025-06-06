@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            font-family: Arial, sans-serif;
+        }
+        #loginForm {
+            background: #1a1a1a;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.529);
+            max-width: 320px;
+            margin: 80px auto;
+        }
+        label {
+            display: grid;
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-style: italic;
+            color: #fff;
+            font-size: 18px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #1a1a1a;
+            color: #fff;
+            font-size: 16px; 
+            font-weight: bold; 
+            text-align: center;
+            
+        }
+        #botaoEntrar {
+            width: 100%;
+            margin: 10px;
+            padding: 10px;
+            background: #2db01e;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #botaoEntrar:hover {
+            background: #205f0c;
+        }
+        #botaoCadastrar {
+            width: 100%;
+            margin: 10px;
+            padding: 10px;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #botaoCadastrar:hover {
+            background: #0d4d9a;
+        }
+
+        #mostrarSenhaContainer {
+            width: 85%;
+            display: flex;
+            align-items: center; /* Centraliza verticalmente */
+            margin-bottom: 16px; /* Espaço abaixo do contêiner */
+        }
+
+        #mostrarSenhaContainer input[type="checkbox"] {
+            margin: 0; /* Remove margens extras do checkbox */
+            width: 20px; /* Define um tamanho fixo para o checkbox */
+            height: 20px; /* Define um tamanho fixo para o checkbox */
+        }
+
+        #mostrarSenhaContainer label {
+            margin: auto;
+            margin-left: 10px; /* Espaço entre o checkbox e o texto */
+            font-size: 16px; /* Ajusta o tamanho do texto */
+            color: #fff;
+            line-height: 20px; /* Igual ao tamanho do checkbox */
+        }
+        
+    </style>
+</head>
+<body>
+    <form id="loginForm" action="#" method="post">
+        <label for="username">Email:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required>
+        <div id="mostrarSenhaContainer">
+            <input type="checkbox" id="mostrarSenha" onclick="togglePasswordVisibility()">
+            <label for="mostrarSenha">Mostrar Senha</label>
+        </div>
+        <button type="submit" id="botaoEntrar" onclick="capturarDadosEntrada(event)">Entrar</button>
+        <button type="buttom"id="botaoCadastrar" onclick="cadastrar()">Não possuo Cadastro</button>
+    </form>
+<script>
+
+
+function togglePasswordVisibility() {
+    const pwd = document.getElementById('password');
+    pwd.type = pwd.type === 'password' ? 'text' : 'password';
+}
+
+function cadastrar() {
+    window.location.href = 'cadastro.html'; // Redireciona para a página de cadastro
+}
+
+function capturarDadosEntrada(event) {
+    event.preventDefault(); // Previne o envio do formulário
+
+    const email = document.getElementById('username').value;
+    const senha = document.getElementById('password').value;
+
+    const dadosUsuario = {
+        email: email,
+        senha: senha
+    };
+
+    console.log('Enviando Dados ao servidor...');
+
+    fetch('https://api-pedidos-637491173534.southamerica-east1.run.app/loggin', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dadosUsuario)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Erro ao enviar os dados: ' + response.statusText);
+        }
+    })
+    .then(data => {
+        if (data.success) {
+            console.log('Login bem-sucedido:', data);
+            const emailParam = encodeURIComponent(email);
+            window.location.href = `https://script.google.com/macros/s/AKfycbx04UaMNfYvE7VHoYve3kIsWBVe84vWkg6vScw4XYc/dev?email=${emailParam}`; // Redireciona para a página de pedidos
+        
+        } else {
+            console.error('Erro no login:', data.message);
+            alert('Erro no login: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao enviar os dados:', error);
+        alert('Erro ao enviar os dados: ' + error.message);
+    });
+}
+
+
+</script>
+</body>
+</html>
