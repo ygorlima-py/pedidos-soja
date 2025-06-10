@@ -153,15 +153,13 @@ function capturarDadosEntrada(event) {
             // Em vez de usar ?email=... na URL, criamos um form POST:
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = 'https://script.google.com/macros/s/AKfycbzlIp36wdvdaJLbU5vLXj1nGtAgpXkDEFS_2UXRXFkVfbQAzDkwuRK7cmdfOe2BnWCB/exec'; // URL do Apps Script
-            // form.action realiza o POST para o Apps Script
-            // Campos ocultos com os dados que queremos enviar
-            const inpEmail = document.createElement('input');
-            inpEmail.type = 'hidden';
-            inpEmail.name = 'email';
-            inpEmail.value = email;
-            form.appendChild(inpEmail);
-            document.body.appendChild(form);
+            form.action = 'https://script.google.com/macros/s/AKfycbw7L0wJDA1W94u458rfCpvDNwjw_VPRP5u1JF1eoVNCmCUe28RcGOniKwywpDLhnWtQ/exec'; // URL do Apps Script
+            const inpEmail = document.createElement('input'); // Cria um input para o email
+            inpEmail.type = 'hidden'; // Define o tipo como hidden (hidden é usado para não exibir o campo no formulário)
+            inpEmail.name = 'email'; // Define o nome do campo como 'email'
+            inpEmail.value = email; // Define o valor do campo como o email do usuário
+            form.appendChild(inpEmail); // Adiciona o input ao formulário
+            document.body.appendChild(form); // Adiciona o formulário ao corpo do documento
             form.submit();  // dispara o POST e carrega a página do Apps Script
         } else {
             console.error('Erro no login:', data.message);
