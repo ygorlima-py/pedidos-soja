@@ -150,9 +150,19 @@ function capturarDadosEntrada(event) {
     .then(data => {
         if (data.success) {
             console.log('Login bem-sucedido:', data);
-            const emailParam = encodeURIComponent(email);
-            window.location.href = `https://script.google.com/macros/s/AKfycbx04UaMNfYvE7VHoYve3kIsWBVe84vWkg6vScw4XYc/dev?email=${emailParam}`; // Redireciona para a página de pedidos
-        
+            // Em vez de usar ?email=... na URL, criamos um form POST:
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'https://script.google.com/macros/s/AKfycbxRaffhe7LCXySEF1IQrbFl7mygtAlyjhoP6SZDWW7lbe6MLtljTuPFH1TrRG0xI4o4/exec'; // URL do Apps Script
+            // form.action realiza o POST para o Apps Script
+            // Campos ocultos com os dados que queremos enviar
+            const inpEmail = document.createElement('input');
+            inpEmail.type = 'hidden';
+            inpEmail.name = 'email';
+            inpEmail.value = email;
+            form.appendChild(inpEmail);
+            document.body.appendChild(form);
+            form.submit();  // dispara o POST e carrega a página do Apps Script
         } else {
             console.error('Erro no login:', data.message);
             alert('Erro no login: ' + data.message);
@@ -163,6 +173,7 @@ function capturarDadosEntrada(event) {
         alert('Erro ao enviar os dados: ' + error.message);
     });
 }
+
 
 
 </script>
